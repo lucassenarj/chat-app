@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: chat-app-db
+    image: mongo
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./dbdata:/data/db
+    networks:
+      - chat-app-network
+
+volumes:
+  dbdata:
+
+networks:
+  chat-app-network:
+    driver: bridge
