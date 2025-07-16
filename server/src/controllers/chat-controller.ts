@@ -56,3 +56,36 @@ export const createChat = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Error while create a new chat!' })
   }
 }
+
+export const getChatMessages = async (req: Request, res: Response) => {
+  const { user } = req.headers;
+  const { chatId } = req.params;
+
+  if (!user) {
+    return res.status(401).json({ error: 'Unauthenticated user!' });
+  }
+
+  if (!chatId) {
+    return res.status(422).json({ error: 'Chat id is required!' });
+  }
+
+  try {
+    const hasUser = await User.findById(user).populate('chats');
+
+    if (!hasUser) {
+      return res.status(401).json({ error: 'Unauthenticated user!' });
+    }
+
+    const chats = await Chat.findById(chatId).populate('messages').sort('-createdAt');
+
+    const messages = [];
+
+    for (const message of chats.messages) {
+      messages.push(message);
+    }
+
+    return res.status(200).json({ messages });
+  } catch (error) {
+    return res.status(500).json({ error: 'Error while fetching chat messages!' });
+  }
+}
