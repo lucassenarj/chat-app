@@ -2,7 +2,7 @@ import express from "express";
 import getRandomAnswer from "./../utils/get-random-answer";
 import { signUp } from "./../controllers/user-controller";
 import { postMessage } from "./../controllers/message-controller";
-import { createChat } from "./../controllers/chat-controller";
+import { createChat, getChats } from "./../controllers/chat-controller";
 
 const router = express.Router();
 
@@ -15,6 +15,7 @@ router.get("/", (req, res) => {
 router.post("/user", signUp);
 
 router.post("/chat", createChat);
+router.get("/chat", getChats);
 
 router.post("/message", postMessage);
 

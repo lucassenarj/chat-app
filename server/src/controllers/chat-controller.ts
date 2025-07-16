@@ -2,12 +2,40 @@ import { Request, Response } from "express";
 import User from "./../models/user-model";
 import Chat from "./../models/chat-model";
 
-export const createChat = async (req: Request, res: Response) => {
+export const getChats = async (req: Request, res: Response) => {
   const { user } = req.headers;
 
   if (!user) {
     return res.status(401).json({ error: 'Unauthenticated user!' });
   }
+
+  try {
+    const hasUser = await User.findById(user).populate('chats');
+
+    if (!hasUser) {
+      return res.status(401).json({ error: 'Unauthenticated user!' });
+    }
+
+    const chats = await Chat.find({ owner: hasUser }).sort('-createdAt');
+
+    return res.status(200).json({ chats });
+  } catch (error) {
+    return res.status(500).json({ error: 'Error while fetching my chats!' });
+  }
+}
+
+export const createChat = async (req: Request, res: Response) => {
+  const { user } = req.headers;
+  const { title } = req.body;
+
+  if (!user) {
+    return res.status(401).json({ error: 'Unauthenticated user!' });
+  }
+
+  if (!title) {
+    return res.status(422).json({ error: 'Title is required' });
+  }
+
 
   try {
     const hasUser = await User.findById(user);
@@ -16,8 +44,8 @@ export const createChat = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Unauthenticated user!' });
     }
 
-    const chat = new Chat({ owner: hasUser });
-    await chat.save()
+    const chat = new Chat({ owner: hasUser, title });
+    await chat.save();
 
     if (!chat) {
       return res.status(422).json({ error: 'Error whilte create a new chat!' });

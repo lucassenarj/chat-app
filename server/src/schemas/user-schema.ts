@@ -12,6 +12,10 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       require: true
     },
+    chats: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Chat',
+    }]
   },
   {
     timestamps: true,
