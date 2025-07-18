@@ -8,11 +8,6 @@ import {
   createRouter,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import FormSimpleDemo from './routes/demo.form.simple.tsx'
-import FormAddressDemo from './routes/demo.form.address.tsx'
-import TanStackQueryDemo from './routes/demo.tanstack-query.tsx'
-
-import Header from './components/Header'
 
 import TanStackQueryLayout from './integrations/tanstack-query/layout.tsx'
 
@@ -21,12 +16,11 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 
-import App from './App.tsx'
+import HomePage from './pages/home.tsx';
 
 const rootRoute = createRootRoute({
   component: () => (
     <>
-      <Header />
       <Outlet />
       <TanStackRouterDevtools />
 
@@ -38,14 +32,11 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: App,
+  component: HomePage,
 })
 
 const routeTree = rootRoute.addChildren([
-  indexRoute,
-  FormSimpleDemo(rootRoute),
-  FormAddressDemo(rootRoute),
-  TanStackQueryDemo(rootRoute),
+  indexRoute
 ])
 
 const router = createRouter({
