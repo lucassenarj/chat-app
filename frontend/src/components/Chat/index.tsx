@@ -22,7 +22,7 @@ function Chat({ chat }: ChatProps) {
             ))
           }
         </div>
-        <ChatInput />
+        <ChatInput id={chat._id} />
       </div>
     </Suspense>
   );
