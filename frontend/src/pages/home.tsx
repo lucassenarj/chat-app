@@ -1,15 +1,37 @@
 import { Suspense, useState } from "react";
+import { createRoute } from "@tanstack/react-router"
+import { createPortal } from "react-dom";
+import type { RootRoute } from "@tanstack/react-router"
 import type { IChat } from "@/types/chat";
 import Chat from "@/components/Chat";
 import ChatList from "@/components/ChatList";
 import Layout from "@/components/Layout";
 import useGetChats from "@/services/api/getChats";
+import useAuthentication from "@/hooks/useAuthentication";
+import NewChatModal from "@/components/NewChatModal";
+import NewChatButton from "@/components/NewChatButton";
+
 
 function HomePage() {
+  const { isAuthenticated } = useAuthentication();
+
+  if (!isAuthenticated) {
+    window.location.href = '/';
+    return null;
+  }
+
   const { data: chats } = useGetChats();
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <Layout>
+      {
+        openModal && createPortal(
+          <NewChatModal isOpen={openModal} closeModal={() => setOpenModal(false)} />,
+          document.body
+        )
+      }
       <Suspense fallback={<div>Loading chats...</div>}>
         <ChatList chats={chats} selectChat={setSelectedChat} />
       </Suspense>
@@ -22,8 +44,14 @@ function HomePage() {
           </div>
         )
       }
+      <NewChatButton openModal={() => setOpenModal(true)} />
     </Layout>
   );
 }
 
-export default HomePage;
+export default (parentRoute: RootRoute) =>
+  createRoute({
+    path: '/chat',
+    component: HomePage,
+    getParentRoute: () => parentRoute,
+  })

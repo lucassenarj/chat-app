@@ -4,7 +4,6 @@ import {
   Outlet,
   RouterProvider,
   createRootRoute,
-  createRoute,
   createRouter,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
@@ -16,7 +15,8 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 
-import HomePage from './pages/home.tsx';
+import HomePage from '@/pages/home.tsx';
+import LoginPage from '@/pages/login.tsx'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -29,14 +29,9 @@ const rootRoute = createRootRoute({
   ),
 })
 
-const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/',
-  component: HomePage,
-})
-
 const routeTree = rootRoute.addChildren([
-  indexRoute
+  LoginPage(rootRoute),
+  HomePage(rootRoute)
 ])
 
 const router = createRouter({

@@ -12,6 +12,10 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       require: true
     },
+    avatar: {
+      type: String,
+      default: 'https://avatar.iran.liara.run/public'
+    },
     chats: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Chat',

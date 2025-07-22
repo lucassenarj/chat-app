@@ -7,12 +7,16 @@ const useGetChatMessages = (
   queryKey?: QueryKey,
 ): IUseGetChatMessages => {
   const { id } = params;
+  const userKey = localStorage.getItem('userKey');
+  if (!userKey) {
+    throw new Error('Unauthorized user');
+  }
   const getChatMessages = async (): Promise<Array<IMessage>> => {
     const response = await fetch(`http://localhost:3001/api/chat/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'User': '6876bd02d38a05d13b8b3197'
+        'User': userKey
         // Add any other headers you need, like authentication tokens
       },
     });

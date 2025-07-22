@@ -5,12 +5,16 @@ import type { QueryKey } from '@tanstack/react-query';
 const useGetChats = (
   queryKey?: QueryKey,
 ): IUseGetChats => {
+  const userKey = localStorage.getItem('userKey');
+  if (!userKey) {
+    throw new Error('Unauthorized user');
+  }
   const getChats = async (): Promise<Array<IChat>> => {
     const response = await fetch('http://localhost:3001/api/chat', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'User': '6876bd02d38a05d13b8b3197'
+        'User': userKey
         // Add any other headers you need, like authentication tokens
       },
     });

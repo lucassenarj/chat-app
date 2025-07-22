@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "./../models/user-model";
 
 export const signUp = async (req: Request, res: Response) => {
-  const { username, name } = req.body;
+  const { username, name, avatar } = req.body;
 
   if (!username || !name) {
     res.status(422).json({ error: 'Username or email invalid!' });
@@ -16,7 +16,7 @@ export const signUp = async (req: Request, res: Response) => {
       return res.status(200).json({ user: hasUser });
     }
 
-    const user = new User({ username, name });
+    const user = new User({ username, name, avatar });
     await user.save();
 
     if (!user) {
