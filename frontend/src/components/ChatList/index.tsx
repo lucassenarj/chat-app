@@ -1,4 +1,12 @@
-function ChatList() {
+import { Suspense } from "react";
+import type { IChat } from "@/types/chat";
+
+type ChatListProps = {
+  chats?: Array<{ id: string; title: string; _id: string }>;
+  selectChat: (chat: IChat) => void;
+};
+
+function ChatList({ chats = [], selectChat }: ChatListProps) {
   return (
     <div id="accordion-collapse" data-accordion="collapsed" className="w-full max-w-sm border border-gray-200 rounded-lg dark:border-gray-700">
       <h2 id="accordion-collapse-heading-1">
@@ -12,28 +20,19 @@ function ChatList() {
       <div id="accordion-collapse-body-1" className="hidden" aria-labelledby="accordion-collapse-heading-1">
         <div className="w-full max-w-sm p-4 shadow-sm sm:p-6 dark:bg-gray-800">
           <p className="text-sm font-normal text-gray-500 dark:text-gray-400">Select your chats or create a new one</p>
-          <ul className="my-4 space-y-3">
-            <li>
-              <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                <span className="flex-1 ms-3 whitespace-nowrap">MetaMask</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                <span className="flex-1 ms-3 whitespace-nowrap">MetaMask</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                <span className="flex-1 ms-3 whitespace-nowrap">MetaMask</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                <span className="flex-1 ms-3 whitespace-nowrap">MetaMask</span>
-              </a>
-            </li>
-          </ul>
+          <Suspense fallback={<div className="text-gray-500 dark:text-gray-400">Loading chats...</div>}>
+            <ul className="my-4 space-y-3">
+              { chats.map(chat => (
+                <li
+                  key={chat._id}
+                  className="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white cursor-pointer"
+                  onClick={() => selectChat(chat)}
+                >
+                  <span className="flex-1 ms-3 whitespace-nowrap">{ chat.title }</span>
+                </li>
+              ))}
+            </ul>
+          </Suspense>
         </div>
       </div>
     </div>
