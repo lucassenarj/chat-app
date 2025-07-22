@@ -25,7 +25,7 @@ function useCreateChat() {
 
     const data = await response.json();
 
-    return data;
+    return data.chat as { _id: string; id: string; title: string };
   }
 
   return useMutation({

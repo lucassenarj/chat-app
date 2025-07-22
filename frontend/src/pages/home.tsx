@@ -28,7 +28,7 @@ function HomePage() {
     <Layout>
       {
         openModal && createPortal(
-          <NewChatModal isOpen={openModal} closeModal={() => setOpenModal(false)} />,
+          <NewChatModal isOpen={openModal} closeModal={() => setOpenModal(false)} selectChat={setSelectedChat} />,
           document.body
         )
       }

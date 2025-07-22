@@ -6,22 +6,24 @@ import useGetChats from "@/services/api/getChats";
 type NewChatModalProps = {
   isOpen: boolean;
   closeModal: () => void;
+  selectChat: (chat: { _id: string; id: string; title: string }) => void;
 };
 
 type NewChatModalFormData = {
   title: string;
 };
 
-function NewChatModal({ isOpen, closeModal }: NewChatModalProps) {
+function NewChatModal({ isOpen, closeModal, selectChat }: NewChatModalProps) {
   const { register, handleSubmit, formState: { errors } } = useForm<NewChatModalFormData>();
   const { refetch } = useGetChats();
   const { mutate: createChat } = useCreateChat();
 
   const onSubmit: SubmitHandler<NewChatModalFormData> = (data) => {
     createChat(data, {
-      onSuccess: () => {
+      onSuccess: (newChat) => {
         refetch();
         closeModal();
+        selectChat(newChat);
         /* TODO: Show toast notification */
       },
       onError: (error) => {
