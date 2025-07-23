@@ -8,11 +8,13 @@ const useGetChatMessages = (
 ): IUseGetChatMessages => {
   const { id } = params;
   const userKey = localStorage.getItem('userKey');
+  const API_PATH = import.meta.env.VITE_API_PATH;;
+
   if (!userKey) {
     throw new Error('Unauthorized user');
   }
   const getChatMessages = async (): Promise<Array<IMessage>> => {
-    const response = await fetch(`http://localhost:3001/api/chat/${id}`, {
+    const response = await fetch(`${API_PATH}/chat/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,8 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 
 function useSignIn() {
+  const API_PATH = import.meta.env.VITE_API_PATH;
+
   const login = async (form: { name: string; username: string }) => {
-    const response = await fetch('http://localhost:3001/api/user', {
+    const response = await fetch(`${API_PATH}/user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

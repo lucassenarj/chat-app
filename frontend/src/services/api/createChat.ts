@@ -3,13 +3,14 @@ import useAuthentication from "@/hooks/useAuthentication";
 
 function useCreateChat() {
   const { user } = useAuthentication();
+  const API_PATH = import.meta.env.VITE_API_PATH;
 
   if (!user.key) {
     throw new Error('User is not authenticated');
   }
 
   const newChat = async (form: { title: string }) => {
-    const response = await fetch('http://localhost:3001/api/chat', {
+    const response = await fetch(`${API_PATH}/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

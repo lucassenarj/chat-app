@@ -6,11 +6,13 @@ const useGetChats = (
   queryKey?: QueryKey,
 ): IUseGetChats => {
   const userKey = localStorage.getItem('userKey');
+  const API_PATH = import.meta.env.VITE_API_PATH;;
+
   if (!userKey) {
     throw new Error('Unauthorized user');
   }
   const getChats = async (): Promise<Array<IChat>> => {
-    const response = await fetch('http://localhost:3001/api/chat', {
+    const response = await fetch(`${API_PATH}/chat`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
